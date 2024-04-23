@@ -51,11 +51,11 @@ func main() {
 
 	notificationUrl := os.Getenv("NOTIFICATION_URL")
 
-	if len(os.Args) <= 0 {
+	if len(os.Args[1:]) <= 0 {
 		log.Panicln("Must provide arguments of which events that should be subscribed to: go run main.go <event> <event> ...")
 
 	}
-	log.Printf("Events to subscribe for: %v", os.Args)
+	log.Printf("Events to subscribe for: %v", os.Args[1:])
 
 	notificationAdapter, err := notificationadapter.NewNotificationAdapter(
 		address,
@@ -66,7 +66,7 @@ func main() {
 		serviceRegistryAddress,
 		serviceRegistryPort,
 		notificationUrl,
-		os.Args,
+		os.Args[1:],
 	)
 	if err != nil {
 		log.Panic(err)

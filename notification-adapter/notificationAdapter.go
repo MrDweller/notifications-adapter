@@ -105,7 +105,10 @@ func (notificationAdapter *NotificationAdapter) StartNotificationAdapter() error
 
 			for _, event := range eventsToSubscribeTo {
 				err := notificationAdapter.Subscribe(event)
-				log.Printf("\n\t[!] Error during subscription of event: %s\n", err)
+				if err != nil {
+					log.Printf("\t[!] Error during subscription of event %s: %s\n", event, err)
+
+				}
 			}
 
 		}
@@ -115,14 +118,14 @@ func (notificationAdapter *NotificationAdapter) StartNotificationAdapter() error
 	for receivedEvent := range notificationAdapter.eventChannel {
 		var event event.Event
 		if err := json.Unmarshal(receivedEvent, &event); err != nil {
-			log.Printf("\n\t[!] Error received event with unkown structure: %s\n", receivedEvent)
+			log.Printf("\t[!] Error received event with unkown structure: %s\n", receivedEvent)
 			continue
 		}
 
-		log.Printf("\n\t[x] Received %s.\n", event)
+		log.Printf("\t[x] Received %s.\n", event)
 		err := notificationAdapter.HandleEvent(event)
 		if err != nil {
-			log.Printf("\n\t[!] Error during handling of the event: %s\n", err)
+			log.Printf("\t[!] Error during handling of the event: %s\n", err)
 
 		}
 	}
@@ -189,7 +192,7 @@ func (notificationAdapter *NotificationAdapter) Subscribe(requestedService strin
 	providers := orchestrationResponse.Response
 
 	for _, provider := range providers {
-		log.Printf("\n\t[*] Subscribing to %s events on %s at %s:%d.\n", requestedService, provider.Provider.SystemName, provider.Provider.Address, provider.Provider.Port)
+		log.Printf("\t[*] Subscribing to %s events on %s at %s:%d.\n", requestedService, provider.Provider.SystemName, provider.Provider.Address, provider.Provider.Port)
 		go func(systemName string, address string, port int, serviceDefinition string, metadata map[string]string) {
 			err := notificationAdapter.Subscriber.Subscribe(
 				systemName,
@@ -203,7 +206,7 @@ func (notificationAdapter *NotificationAdapter) Subscribe(requestedService strin
 			)
 
 			if err != nil {
-				log.Printf("\n\t[*] Error during subscription: %s\n", err)
+				log.Printf("\t[*] Error during subscription: %s\n", err)
 				return
 			}
 
@@ -224,7 +227,7 @@ func (notificationAdapter *NotificationAdapter) Unsubscribe(requestedService str
 	if err != nil {
 		return err
 	}
-	log.Printf("\n\t[*] Unsubscribing from %s events.\n", requestedService)
+	log.Printf("\t[*] Unsubscribing from %s events.\n", requestedService)
 	return nil
 }
 
