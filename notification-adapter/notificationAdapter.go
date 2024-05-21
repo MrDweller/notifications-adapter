@@ -100,10 +100,6 @@ func NewNotificationAdapter(address string, port int, domainAddress string, doma
 		eventsToSubscribeTo: eventsToSubscribeTo,
 		eventSubscriber:     eventSubscriber,
 	}
-	if err != nil {
-		return nil, err
-	}
-
 	return notificationAdapter, nil
 }
 
