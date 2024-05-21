@@ -26,3 +26,19 @@ EVENT_HANDLER_IMPLEMENTATION=<event handler implementation, (e.i. "rabbitmq-3.12
 ```
 
 Create pem certificate cert and key files, store them in a `certificates` directory. Also add a truststore pem file in the `certificates` directory. 
+
+## Requirements
+
+* **golang 1.22**, later versions should also work.
+
+## Start
+
+Run the command,
+
+```
+go run . <event> <evnet>
+```
+
+The arguments `<evnet>` states what services the notification adapter should query for and when found subscribe to.
+For example if the system is started with `go run . stuck`, the notification adapter will query arrowhead for a `stuck` service, 
+and then subscribe to the service using the subscribe funcationallity from [event-handler](https://github.com/MrDweller/event-handler).
